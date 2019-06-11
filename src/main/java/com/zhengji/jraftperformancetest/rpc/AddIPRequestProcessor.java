@@ -16,6 +16,14 @@
  */
 package com.zhengji.jraftperformancetest.rpc;
 
+import com.alipay.remoting.AsyncContext;
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.exception.CodecException;
+import com.alipay.remoting.rpc.protocol.AsyncUserProcessor;
+import com.alipay.remoting.serialization.SerializerManager;
+import com.alipay.sofa.jraft.entity.Task;
+import com.zhengji.jraftperformancetest.AddIPClosure;
+import com.zhengji.jraftperformancetest.DemoServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +40,9 @@ public class AddIPRequestProcessor extends AsyncUserProcessor<AddIPRequest> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AddIPRequestProcessor.class);
 
-    private final VIPServerServer counterServer;
+    private final DemoServer counterServer;
 
-    public AddIPRequestProcessor(VIPServerServer counterServer) {
+    public AddIPRequestProcessor(DemoServer counterServer) {
         super();
         this.counterServer = counterServer;
     }
@@ -64,6 +72,7 @@ public class AddIPRequestProcessor extends AsyncUserProcessor<AddIPRequest> {
 
             // apply task to raft group.
             counterServer.getNode().apply(task);
+            LOG.info("process ip: " + request.getNewIP());
         } catch (final CodecException e) {
             LOG.error("Fail to encode AddIPRequest", e);
             response.setSuccess(false);

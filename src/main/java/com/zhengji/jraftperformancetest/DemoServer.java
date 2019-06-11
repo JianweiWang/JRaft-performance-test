@@ -21,11 +21,11 @@ import com.alipay.sofa.jraft.Node;
 import com.alipay.sofa.jraft.RaftGroupService;
 import com.alipay.sofa.jraft.conf.Configuration;
 import com.alipay.sofa.jraft.entity.PeerId;
-import com.alipay.sofa.jraft.example.vipserver.rpc.AddIPRequestProcessor;
-import com.alipay.sofa.jraft.example.vipserver.rpc.GetValueRequestProcessor;
-import com.alipay.sofa.jraft.example.vipserver.rpc.ValueResponse;
 import com.alipay.sofa.jraft.option.NodeOptions;
 import com.alipay.sofa.jraft.rpc.RaftRpcServerFactory;
+import com.zhengji.jraftperformancetest.rpc.AddIPRequestProcessor;
+import com.zhengji.jraftperformancetest.rpc.GetValueRequestProcessor;
+import com.zhengji.jraftperformancetest.rpc.ValueResponse;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -38,13 +38,13 @@ import java.io.IOException;
  *
  * 2018-Apr-09 4:51:02 PM
  */
-public class VIPServerServer {
+public class DemoServer {
 
     private RaftGroupService      raftGroupService;
     private Node                  node;
-    private VIPServerStateMachine fsm;
+    private DemoServerStateMachine fsm;
 
-    public VIPServerServer(final String dataPath, final String groupId, final PeerId serverId,
+    public DemoServer(final String dataPath, final String groupId, final PeerId serverId,
                            final NodeOptions nodeOptions) throws IOException {
         // 初始化路径
         FileUtils.forceMkdir(new File(dataPath));
@@ -56,7 +56,7 @@ public class VIPServerServer {
         rpcServer.registerUserProcessor(new GetValueRequestProcessor(this));
         rpcServer.registerUserProcessor(new AddIPRequestProcessor(this));
         // 初始化状态机
-        this.fsm = new VIPServerStateMachine();
+        this.fsm = new DemoServerStateMachine();
         // 设置状态机到启动参数
         nodeOptions.setFsm(this.fsm);
         // 设置存储路径
@@ -72,7 +72,7 @@ public class VIPServerServer {
         this.node = this.raftGroupService.start();
     }
 
-    public VIPServerStateMachine getFsm() {
+    public DemoServerStateMachine getFsm() {
         return this.fsm;
     }
 
@@ -99,7 +99,7 @@ public class VIPServerServer {
         return response;
     }
 
-    private static VIPServerServer getVIPServer(String dataPath, String groupId, String serverIdStr, String initConfStr)
+    private static DemoServer getDemoServer(String dataPath, String groupId, String serverIdStr, String initConfStr)
                                                                                                                         throws IOException {
         final NodeOptions nodeOptions = new NodeOptions();
         // 为了测试,调整 snapshot 间隔等参数
@@ -122,18 +122,10 @@ public class VIPServerServer {
         nodeOptions.setInitialConf(initConf);
 
         // 启动
-        final VIPServerServer server = new VIPServerServer(dataPath, groupId, serverId, nodeOptions);
+        final DemoServer server = new DemoServer(dataPath, groupId, serverId, nodeOptions);
         System.out.println("Started counter server at port:" + server.getNode().getNodeId().getPeerId().getPort());
 
         return server;
     }
 
-    public static void main(final String[] args) throws IOException {
-        VIPServerServer serverServer0 = getVIPServer("/tmp/vipserver-server", "counter", "127.0.0.1:8081",
-            "127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083");
-        VIPServerServer serverServer1 = getVIPServer("/tmp/vipserver-server1", "counter", "127.0.0.1:8082",
-            "127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083");
-        VIPServerServer serverServer2 = getVIPServer("/tmp/vipserver-server2", "counter", "127.0.0.1:8083",
-            "127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083");
-    }
 }

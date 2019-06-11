@@ -16,6 +16,9 @@
  */
 package com.zhengji.jraftperformancetest.rpc;
 
+import com.alipay.remoting.BizContext;
+import com.alipay.remoting.rpc.protocol.SyncUserProcessor;
+import com.zhengji.jraftperformancetest.DemoServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +33,9 @@ public class GetValueRequestProcessor extends SyncUserProcessor<GetValueRequest>
 
     private static final Logger LOG = LoggerFactory.getLogger(GetValueRequestProcessor.class);
 
-    private VIPServerServer     counterServer;
+    private DemoServer counterServer;
 
-    public GetValueRequestProcessor(VIPServerServer counterServer) {
+    public GetValueRequestProcessor(DemoServer counterServer) {
         super();
         this.counterServer = counterServer;
     }

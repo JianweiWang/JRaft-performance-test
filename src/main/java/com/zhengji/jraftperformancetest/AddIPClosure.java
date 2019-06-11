@@ -18,8 +18,8 @@ package com.zhengji.jraftperformancetest;
 
 import com.alipay.sofa.jraft.Closure;
 import com.alipay.sofa.jraft.Status;
-import com.alipay.sofa.jraft.example.vipserver.rpc.AddIPRequest;
-import com.alipay.sofa.jraft.example.vipserver.rpc.ValueResponse;
+import com.zhengji.jraftperformancetest.rpc.AddIPRequest;
+import com.zhengji.jraftperformancetest.rpc.ValueResponse;
 
 /**
  * RPC request closure
@@ -31,12 +31,12 @@ import com.alipay.sofa.jraft.example.vipserver.rpc.ValueResponse;
 public class AddIPClosure implements Closure {
 
     @SuppressWarnings({ "FieldCanBeLocal", "unused" })
-    private VIPServerServer counterServer;
-    private AddIPRequest    request;
-    private ValueResponse   response;
+    private DemoServer counterServer;
+    private AddIPRequest request;
+    private ValueResponse response;
     private Closure         done;
 
-    public AddIPClosure(VIPServerServer counterServer, AddIPRequest request, ValueResponse response, Closure done) {
+    public AddIPClosure(DemoServer counterServer, AddIPRequest request, ValueResponse response, Closure done) {
         super();
         this.counterServer = counterServer;
         this.request = request;

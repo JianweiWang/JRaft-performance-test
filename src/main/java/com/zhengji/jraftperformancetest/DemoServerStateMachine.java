@@ -25,11 +25,11 @@ import com.alipay.sofa.jraft.Status;
 import com.alipay.sofa.jraft.core.StateMachineAdapter;
 import com.alipay.sofa.jraft.error.RaftError;
 import com.alipay.sofa.jraft.error.RaftException;
-import com.alipay.sofa.jraft.example.vipserver.rpc.AddIPRequest;
-import com.alipay.sofa.jraft.example.vipserver.snapshot.CounterSnapshotFile;
 import com.alipay.sofa.jraft.storage.snapshot.SnapshotReader;
 import com.alipay.sofa.jraft.storage.snapshot.SnapshotWriter;
 import com.alipay.sofa.jraft.util.Utils;
+import com.zhengji.jraftperformancetest.rpc.AddIPRequest;
+import com.zhengji.jraftperformancetest.snapshot.CounterSnapshotFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,9 +45,9 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * 2018-Apr-09 4:52:31 PM
  */
-public class VIPServerStateMachine extends StateMachineAdapter {
+public class DemoServerStateMachine extends StateMachineAdapter {
 
-    private static final Logger LOG        = LoggerFactory.getLogger(VIPServerStateMachine.class);
+    private static final Logger LOG        = LoggerFactory.getLogger(DemoServerStateMachine.class);
 
     /**
      * Counter value
@@ -68,7 +68,7 @@ public class VIPServerStateMachine extends StateMachineAdapter {
      * Returns current value.
      */
     public long getValue() {
-        return this.value.get();
+        return this.ips.size();
     }
 
     @Override
